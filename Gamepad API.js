@@ -7,6 +7,7 @@ function canGame() {
 
 function reportOnGamepad() {
     var gp = navigator.getGamepads()[0];
+    var axes1 = gp.gp.axes[1];
     var html = "";
     html += "id: "+gp.id+"<br/>";
 
@@ -20,6 +21,38 @@ function reportOnGamepad() {
         html+= "Stick "+(Math.ceil(i/2)+1)+": "+gp.axes[i]+","+gp.axes[i+1]+"<br/>";
     }
 
+
+    switch (gp.buttons[7].pressed){
+        case true:
+            console.log("rij naar achteren");
+            break;
+
+        case false:
+            console.log("stop 1");
+            break;
+    }
+
+    switch (gp.buttons[8].pressed){
+        case true:
+            console.log("rij naar voren");
+            break;
+
+        case false:
+            console.log("stop 2");
+            break;
+    }
+
+    switch (gp.axes[1]){
+        case -1:
+            console.log("links");
+            break;
+
+        case 1:
+            console.log("rechts");
+            break;
+    }
+
+    console.log(axes1);
     $("#gamepadDisplay").html(html);
 }
 
