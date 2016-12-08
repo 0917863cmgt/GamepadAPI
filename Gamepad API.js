@@ -7,7 +7,7 @@ function canGame() {
 
 function reportOnGamepad() {
     var gp = navigator.getGamepads()[0];
-    var axes1 = gp.axes[1];
+    //var axes1 = navigator.getGamepads()[0].axes[1];
     var html = "";
     html += "id: "+gp.id+"<br/>";
 
@@ -52,7 +52,6 @@ function reportOnGamepad() {
             break;
     }
 
-    console.log(axes1);
     $("#gamepadDisplay").html(html);
 }
 
