@@ -54,16 +54,12 @@ function reportOnGamepad() {
             break;
     }
 
-    document.getElementById("gamepadDisplay").html(html);
+    document.getElementById("gamepadDisplay").innerHTML = html;
 }
 
 function initGP() {
 
     if(canGame()) {
-
-        var prompt = "To begin using your gamepad, connect it and press any button!";
-        var promptEl = document.getElementById("gamepadPrompt")
-        promptEl.text(prompt);
 
         window.addEventListener('gamepadconnected', onGamepadConnected);
         window.addEventListener('gamepaddisconnected', onGamepadDisconnected);
@@ -71,25 +67,27 @@ function initGP() {
         function onGamepadConnected() {
             
             hasGP = true;
-            promptEl.html("Gamepad connected!");
             console.log("connection event");
-            repGP = window.setInterval(reportOnGamepad,100);
+            repGP = window.setInterval(reportOnGamepad, 100);
         }
 
 
        function onGamepadDisconnected() {
-           
-            console.log("disconnection event");
-            promptEl.text(prompt);
+
             window.clearInterval(repGP);
         }
 
         var checkGP = window.setInterval(function() {
             
-            console.log('checkGP');
             if(navigator.getGamepads()[0]) {
                 
-                if(!hasGP) window.trigger("gamepadconnected");
+                if(!hasGP) {
+
+                    if (document.createEvent) {
+
+                        onGamepadConnected.apply(window);
+                    }
+                }
                 window.clearInterval(checkGP);
             }
         }, 500);
