@@ -1,6 +1,8 @@
 var hasGP = false;
 var repGP;
 
+window.addEventListener('load', initGP);
+
 function canGame() {
     return "getGamepads" in navigator;
 }
@@ -52,37 +54,44 @@ function reportOnGamepad() {
             break;
     }
 
-    $("#gamepadDisplay").html(html);
+    document.getElementById("gamepadDisplay").html(html);
 }
 
-$(document).ready(function() {
+function initGP() {
 
     if(canGame()) {
 
         var prompt = "To begin using your gamepad, connect it and press any button!";
-        $("#gamepadPrompt").text(prompt);
+        var promptEl = document.getElementById("gamepadPrompt")
+        promptEl.text(prompt);
 
-        $(window).on("gamepadconnected", function() {
+        window.addEventListener('gamepadconnected', onGamepadConnected);
+        window.addEventListener('gamepaddisconnected', onGamepadDisconnected);
+        
+        function onGamepadConnected() {
+            
             hasGP = true;
-            $("#gamepadPrompt").html("Gamepad connected!");
+            promptEl.html("Gamepad connected!");
             console.log("connection event");
             repGP = window.setInterval(reportOnGamepad,100);
-        });
+        }
 
-        $(window).on("gamepaddisconnected", function() {
+
+       function onGamepadDisconnected() {
+           
             console.log("disconnection event");
-            $("#gamepadPrompt").text(prompt);
+            promptEl.text(prompt);
             window.clearInterval(repGP);
-        });
+        }
 
-        //setup an interval for Chrome
         var checkGP = window.setInterval(function() {
+            
             console.log('checkGP');
             if(navigator.getGamepads()[0]) {
-                if(!hasGP) $(window).trigger("gamepadconnected");
+                
+                if(!hasGP) window.trigger("gamepadconnected");
                 window.clearInterval(checkGP);
             }
         }, 500);
     }
-
-});
+}
